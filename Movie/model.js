@@ -24,9 +24,9 @@ export async function getAll(userid) {
   return data;
 }
 
-async function insert(movie) {
-  const query = 'INSERT INTO Movies (title, year) VALUES (?, ?)';
-  const [result] = await connection.query(query, [movie.title, movie.year]);
+async function insert(movie, userid) {
+  const query = 'INSERT INTO Movies (title, year, public, user) VALUES (?, ?, ?, ?)';
+  const [result] = await connection.query(query, [movie.title, movie.year, movie.public, userid]);
   return { ...movie, id: result.insertId };
 }
 
@@ -52,7 +52,7 @@ export function save(movie, userid) {
   if (movie.id) {
     return update(movie, userid);
   }
-  return insert(movie);
+  return insert(movie, userid);
 }
 
 export async function rate(userid, movieid, stars){
